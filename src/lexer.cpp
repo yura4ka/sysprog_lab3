@@ -108,8 +108,10 @@ Token Lexer::nextLexeme() {
             case State::Number:
                 if (_c == '_')
                     _state = State::Number_;
-                else if (_c == '.' || _c == 'e' || _c == 'E')
+                else if (_c == '.')
                     _state = State::Float;
+                else if (_c == 'e' || _c == 'E')
+                    _state = State::FloatExp;
                 else if (std::isspace(_c) || Lexemes::isOperator({_c}))
                     return {LexemeType::Integer, lexeme};
                 else if (!std::isdigit(_c))
@@ -131,8 +133,10 @@ Token Lexer::nextLexeme() {
                     _state = State::NumberOct_;
                 else if (_c == 'x' || _c == 'X')
                     _state = State::NumberHexStart;
-                else if (_c == '.' || _c == 'e' || _c == 'E')
+                else if (_c == '.')
                     _state = State::Float;
+                else if (_c == 'e' || _c == 'E')
+                    _state = State::FloatExp;
                 else if (Lexemes::isOctal(_c))
                     _state = State::ZeroNumber;
                 else if (_c == '8' || _c == '9')
@@ -398,7 +402,7 @@ Token Lexer::nextLexeme() {
                 _state = State::Error;
                 break;
             case State::String:
-                if (_c == EOF)
+                if (_c == EOF || _c == '\n')
                     return {LexemeType::Error, lexeme};
                 lexeme += _c;
                 if (_c == '\"') {
