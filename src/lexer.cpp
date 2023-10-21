@@ -153,7 +153,7 @@ Token Lexer::nextLexeme() {
                 if (_c == '_')
                     _state = State::NumberBin_;
                 else
-                    _state = _c == '0' || _c == '1' ? State::NumberOct : State::Error;
+                    _state = _c == '0' || _c == '1' ? State::NumberBin : State::Error;
                 lexeme += _c;
                 break;
             case State::NumberBin:
